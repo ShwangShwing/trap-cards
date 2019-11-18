@@ -12,6 +12,10 @@ class ControllerFactory {
         return new this.controllers.DummyController();
     }
 
+    getCardsController() {
+        return new this.controllers.CardsController();
+    }
+
 }
 
 module.exports = ControllerFactory;
