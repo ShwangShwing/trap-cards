@@ -7,9 +7,9 @@ const start = async () => {
     cardNumbers = new CardNumbers();
     stampCodes = new StampCodes();
     database = new MysqlDatabase(config.mysqlConfig);
-    const data = require('./app/data').init(database);
-    controllerFactory = new ControllerFactory(controllers, await data, cardNumbers, stampCodes);
-    const app = require('./app').init(config, controllerFactory);
+    const data = await require('./app/data').init(database);
+    controllerFactory = new ControllerFactory(controllers, data, config.trustedAdminIps, cardNumbers, stampCodes);
+    const app = require('./app').init(config, data, controllerFactory);
     return (await app).listen(
         config.port,
         () => console.log(`Server started and `

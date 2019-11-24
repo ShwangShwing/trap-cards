@@ -1,5 +1,6 @@
 module.exports = {
     ErrorController: require('./errors/errors.controller'),
-    DummyController: require('./dummy/dummy.controller'),
+    AuthController: require('./auth/auth.controller'),
     CardsController: require('./public/cards.controller'),
+    AdminController: require('./admin/admin.controller'),
 };

@@ -12,7 +12,7 @@ class CardsController {
                 req.flash('error', `Карта с номер ${req.query.cardnumber} не съществува.`);
             }
         }
-        res.render('card-check', { title: 'Проверка на карта', searchedCardNumber: req.query.cardnumber, card: card, errors:  await req.consumeFlash('error') });
+        res.render('public/card-check', { title: 'Проверка на карта', searchedCardNumber: req.query.cardnumber, card: card, errors:  await req.consumeFlash('error') });
     }
 
     async redeemStamp(req, res) {
@@ -63,7 +63,7 @@ class CardsController {
             }
         }
 
-        res.render('redeem-stamp', { 
+        res.render('public/redeem-stamp', { 
             title: 'Въвеждане на талон', 
             cardNumber, 
             stampCode,
@@ -112,7 +112,6 @@ class CardsController {
                     return;
                 } catch (err) {
                     req.flash('error', 'Възникна грешка при регистрацията!');
-                    console.log(err);
                 }
             }
         }
@@ -126,7 +125,7 @@ class CardsController {
             messages: await req.consumeFlash('info'), 
             errors: await req.consumeFlash('error') 
         }
-        res.render('register', templateValues);    
+        res.render('public/register', templateValues);    
     }
 }
 

@@ -9,7 +9,11 @@ const config = {
         user: 'trapcards',
         password: 'trap-cards',
         database: 'trapcards'
-    }
+    },
+    trustedAdminIps: [
+        '127.0.0.1',
+        '::1'
+    ]
 };
 
 module.exports = config;

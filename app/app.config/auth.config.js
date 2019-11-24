@@ -1,64 +1,41 @@
 const passport = require('passport');
 const { Strategy } = require('passport-local');
 
-const MongoStore = require('connect-mongo')(session);
-const sha256 = require('sha256');
 
-const configAuth = (app, apartments, admin, db, config) => {
+const configAuth = (app, data) => {
 
     app.use(passport.initialize());
     app.use(passport.session());
 
     passport.use(new Strategy(
         (username, password, done) => {
-            const passowrdHash = sha256(password);
-            admin
-                .authAdmin(username, passowrdHash)
+            Promise.resolve()
+                .then(() => {
+                    return data.admins.verifyAdmin(username, password);
+                })
+                .then((admin) => {
+                    if (admin) {
+                        return admin;
+                    } else {
+                        throw('Invalid user');
+                    }
+                })
                 .then((user) => {
                     done(null, user);
                 })
                 .catch(() => {
-                    apartments
-                        .authApartment(
-                            username,
-                            passowrdHash)
-                        .then((user) => {
-                            done(null, user);
-                        })
-                        .catch((err) => {
-                            done(null, false,
-                                { message: 'Invalid login credentials!' });
-                        });
+                    done(null, false,
+                        { message: 'Invalid login credentials!' });
                 });
         }
     ));
 
     passport.serializeUser((user, done) => {
-        done(null, { type: user.type, id: user._id });
+        done(null, user);
     });
 
     passport.deserializeUser((loggedUser, done) => {
-        if (loggedUser.type === 'admin') {
-            admin.getById(loggedUser.id)
-                .then((user) => {
-                    done(null, user);
-                })
-                .catch((err) => {
-                    // logout the user to avoid 
-                    // "Failed to deserialize user out of session"
-                    done(null, false);
-                });
-        } else if (loggedUser.type === 'apartment') {
-            apartments.getById(loggedUser.id)
-                .then((user) => {
-                    done(null, user);
-                })
-                .catch((err) => {
-                    // logout the user to avoid 
-                    // "Failed to deserialize user out of session"
-                    done(null, false);
-                });
-        }
+        done(null, loggedUser);
     });
 };
 
