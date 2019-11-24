@@ -16,9 +16,57 @@ class CardsController {
     }
 
     async redeemStamp(req, res) {
+        let cardNumber = req.query.cardnumber;
+        let stampCode = req.query.stampcode;
+        if (cardNumber && stampCode) {
+            const delayAction = async (milliseconds) => {
+                return new Promise((resolve) => {
+                    setTimeout(() => resolve(), milliseconds);
+                });                
+            }
+            await delayAction(5000); // delay response for 5 seconds to avoid brute forcing the codes
+
+            let hasError = false;
+
+            const stamp = await this.data.stamps.getByCode(stampCode);
+            if (stamp) {
+                if (stamp.claimedByNumber) {
+                    hasError = true;
+                }
+            } else {
+                hasError = true;
+            }
+            const card = await this.data.cards.getByNumber(cardNumber);
+            if (!card) {
+                hasError = true;
+            }
+
+            if (card && stamp) {
+                const isSuccessful = await this.data.stamps.redeemStamp(stamp.code, card.number);
+                if (!isSuccessful) {
+                    hasError = true;
+                }
+            }
+
+            if (hasError) {
+                req.flash('error', 'Кодът на талона е грешен, номерът на картата е грешен или талонът е вече използван!');
+            } else {
+                req.flash('info', `Талон с код ${stamp.code} е въведен в карта номер ${card.number}.`);
+                stampCode = null;
+
+                // activate card
+                const isCardActivated = await this.data.cards.activateCardIfEnoughPoints(card.number, 100);
+                if (isCardActivated) {
+                    req.flash('info', `Карта номер ${card.number} вече е активна!`);
+                    // Maybe send mail
+                }
+            }
+        }
+
         res.render('redeem-stamp', { 
             title: 'Въвеждане на талон', 
-            cardNumber: req.query.cardnumber, 
+            cardNumber, 
+            stampCode,
             messages: await req.consumeFlash('info'), 
             errors: await req.consumeFlash('error') 
         });    

@@ -9,7 +9,7 @@ class CardsData extends BaseData {
             'nick as nick', 
             'first_name as firstName', 
             'last_name as lastName', 
-            'pic_url as picUrl', 
+            'pic_path as picPath', 
             'issue_date as issueDate', 
             'balance as balance', 
             'pending_deactivation_date as pendingDeactivationDate',
@@ -80,6 +80,17 @@ class CardsData extends BaseData {
         await this._database.query(query);
 
         return this.getByNumber(newCardNumber);
+    }
+
+    async activateCardIfEnoughPoints(cardNumber, minPoints) {
+        minPoints = Math.trunc(minPoints);
+
+        const query = {
+            sql: `update cards set is_active = 1 where number = ? and balance >= ? and is_active = 0`,
+            values: [ cardNumber, minPoints ]
+        }
+        const result = await this._database.query(query);
+        return result.affectedRows == 1;
     }
 }
 

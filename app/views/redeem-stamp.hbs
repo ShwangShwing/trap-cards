@@ -2,17 +2,17 @@
     {{title}}
 </h1>
 <div>
-    <form action="" method="POST">
+    <form action="" method="GET">
         <div class="item-row">
             <div class="item-label"><label for="card-number">Карта номер</label></div>
             <div class="item-value"><input type="text" name="cardnumber" id="card-number" value="{{cardNumber}}"></div>
         </div>
         <div class="item-row">
-            <div class="item-label"><label for="stamp-number">Талон номер</label></div>
-            <div class="item-value"><input type="text" name="stampnumber" id="stamp-number"></div>
+            <div class="item-label"><label for="stamp-code">Талон код</label></div>
+            <div class="item-value"><input type="text" name="stampcode" id="stamp-code" value="{{stampCode}}"></div>
         </div>
         <div class="item-row">
-            <input type="submit" name="" value="Въведи">
+            <input type="submit" value="Въведи">
         </div>
     </form>
     <a href="/register">Регистрация</a>
