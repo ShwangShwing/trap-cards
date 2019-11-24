@@ -1,10 +1,11 @@
 class DummyController {
-    constructor(data) {
-        this.data = data;
+    constructor(stampCodes) {
+        this.stampCodes = stampCodes;
     }
 
     dummy(req, res) {
-        res.render('index', { title: 'Dummy page', kur: req.params.kur });
+        const stampCode = this.stampCodes.getStampCode();
+        res.render('index', { title: 'Dummy page', stampCode: stampCode });
     }
 }
 

@@ -2,9 +2,23 @@
 <html>
   <head>
     <title>{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/public/stylesheets/style.css' />
   </head>
   <body>
+    {{#if errors}}
+    <div>
+        {{#each errors}}
+        <div class="error-message">{{this}}</div>
+        {{/each}}
+    </div>
+    {{/if}}
+    {{#if messages}}
+    <div>
+        {{#each messages}}
+        <div class="info-message">{{this}}</div>
+        {{/each}}
+    </div>
+    {{/if}}
     {{{body}}}
   </body>
 </html>

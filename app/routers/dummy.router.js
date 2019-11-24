@@ -4,7 +4,7 @@ var router = express.Router();
 const attach = (app, controllersFactory) => {
   const dummyController = controllersFactory.getDummyController();
 
-  router.route('/dummy/:kur', ).get(dummyController.dummy)
+  router.route('/dummy/', ).get((req, res) => dummyController.dummy(req, res))
 
   app.use('/', router);
 }
