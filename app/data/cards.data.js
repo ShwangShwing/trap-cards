@@ -61,7 +61,7 @@ class CardsData extends BaseData {
             'nick', 
             'first_name', 
             'last_name', 
-            'pic_url', 
+            'pic_path',
             'issue_date', 
         ].join(', ');
         const insertValues  = [
@@ -70,7 +70,7 @@ class CardsData extends BaseData {
             card.nick,
             card.firstName,
             card.lastName,
-            card.picUrl,
+            card.picPath,
             card.issueDate,
         ];
         const query = {

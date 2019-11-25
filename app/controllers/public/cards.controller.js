@@ -102,7 +102,7 @@ class CardsController {
                     nick: req.body.firstname,
                     firstName: req.body.lastname,
                     lastName: req.body.lastname,
-                    picUrl: '',
+                    picPath: '',
                 }
                 try {
                     const newCard = await this.data.cards.addCard(cardFields, (cn) => this.cardNumbers.putChecksum(cn));
