@@ -108,8 +108,8 @@ class CardsController {
             if (!hasErrors) {
                 const cardFields = {
                     email: req.body.email,
-                    nick: req.body.firstname,
-                    firstName: req.body.lastname,
+                    nick: req.body.nick,
+                    firstName: req.body.firstname,
                     lastName: req.body.lastname,
                     picPath: '',
                 }
