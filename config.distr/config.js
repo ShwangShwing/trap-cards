@@ -11,9 +11,13 @@ const config = {
         database: 'trapcards'
     },
     mailConfig: {
-        host: "localhost",
-        port: 587,
-        secure: false, // true for 465, false for other ports
+        host: "cards.trotoara.com",
+        port: 465,
+        secure: true, // true for 465, false for other ports
+        auth: {
+            user: 'cards@cards.trotoara.com',
+            pass: 'password'
+        }
     },
     trustedAdminIps: [
         '127.0.0.1',

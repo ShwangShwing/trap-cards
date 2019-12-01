@@ -37,7 +37,7 @@ class CardsController {
             } else {
                 hasError = true;
             }
-            const card = await this.data.cards.getByNumber(cardNumber);
+            let card = await this.data.cards.getByNumber(cardNumber);
             if (!card) {
                 hasError = true;
             }
@@ -58,8 +58,25 @@ class CardsController {
                 // activate card
                 const isCardActivated = await this.data.cards.activateCardIfEnoughPoints(card.number, 100);
                 if (isCardActivated) {
+                    // get the card again to get its correct point number
+                    card = await this.data.cards.getByNumber(cardNumber);
                     req.flash('info', `Карта номер ${card.number} вече е активна!`);
-                    // Maybe send mail
+                    try {
+                        // send mail here
+                        let mailOptions = {
+                            from: '"Trotoara cards" <cards@cards.trotoara.com>',
+                            to: card.email,
+                            subject: `Активирана карта ${card.number}`,
+                            template: 'activated',
+                            context: {
+                                card: card
+                            }
+                        };
+                        await this.mailTransport.sendMail(mailOptions);
+                        console.log('Mail sent.');
+                    } catch (err) {
+                        console.log('Mail not sent! ' + err)
+                    }
                 }
             }
         }
