@@ -5,8 +5,8 @@ const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-var MySQLStore = require('express-mysql-session')(session);
-var { flash } = require('express-flash-message');
+const MySQLStore = require('express-mysql-session')(session);
+const { flash } = require('express-flash-message');
 const bodyParser = require('body-parser');
 
 const configApp = (app, config) => {

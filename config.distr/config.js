@@ -10,6 +10,11 @@ const config = {
         password: 'trap-cards',
         database: 'trapcards'
     },
+    mailConfig: {
+        host: "localhost",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+    },
     trustedAdminIps: [
         '127.0.0.1',
         '::1'

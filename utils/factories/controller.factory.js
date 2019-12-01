@@ -1,22 +1,19 @@
 class ControllerFactory {
-    constructor(controllers, data, trustedAdminIps, cardNumbers, stampCodes) {
+    constructor(controllers, data, trustedAdminIps, cardNumbers, stampCodes, mailTransport) {
         this._controllers = controllers;
         this._trustedAdminIps = trustedAdminIps;
         this._data = data;
         this._cardNumbers = cardNumbers;
-        this._stampCodes = stampCodes
+        this._stampCodes = stampCodes;
+        this._mailTransport = mailTransport;
     }
 
     getErrorController() {
         return new this._controllers.ErrorController(this.logger);
     }
 
-    getDummyController() {
-        return new this._controllers.DummyController(this._stampCodes);
-    }
-
     getCardsController() {
-        return new this._controllers.CardsController(this._data, this._cardNumbers);
+        return new this._controllers.CardsController(this._data, this._cardNumbers, this._mailTransport);
     }
 
     getAuthController() {

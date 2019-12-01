@@ -1,7 +1,8 @@
 class CardsController {
-    constructor(data, cardNumbers) {
+    constructor(data, cardNumbers, mailTransport) {
         this.data = data;
         this.cardNumbers = cardNumbers;
+        this.mailTransport = mailTransport;
     }
 
     async cardCheck(req, res) {
@@ -75,10 +76,18 @@ class CardsController {
     async register(req, res) {
         if (req.method == 'POST') {
             let hasErrors = false;
+            let newCard = {};
 
             if (!req.body.email) {
                 hasErrors = true;
                 req.flash('error', 'Не е въведен e-mail!');
+            }
+
+            const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+            if (!emailRegexp.test(req.body.email)) {
+                hasErrors = true;
+                req.flash('error', 'Въведеният e-mail не е валиден!');
             }
 
             if (req.body.email != req.body.emailconfirm) {
@@ -105,14 +114,41 @@ class CardsController {
                     picPath: '',
                 }
                 try {
-                    const newCard = await this.data.cards.addCard(cardFields, (cn) => this.cardNumbers.putChecksum(cn));
+                    newCard = await this.data.cards.addCard(cardFields, (cn) => this.cardNumbers.putChecksum(cn));
                     req.flash('info', `Успешна регистрация. Номерът на регистрираната карта е ${newCard.number}.`);
                     res.redirect(303, `/redeem-stamp?cardnumber=${newCard.number}`);
-                    // send mail here
-                    return;
                 } catch (err) {
                     req.flash('error', 'Възникна грешка при регистрацията!');
+                    hasErrors = true;
                 }
+            }
+
+            if (!hasErrors) {
+                try {
+                    // send mail here
+                    let mailOptions = {
+                        from: '"Trotoara cards" <cards@cards.trotoara.com>',
+                        to: newCard.email,
+                        subject: `Създадена карта ${newCard.number}`,
+                        template: 'registered',
+                        context: {
+                            cardNumber: newCard.number,
+                            email: newCard.email,
+                            nick: newCard.nick,
+                            firstName: newCard.firstName,
+                            lastName: newCard.lastName
+                        }
+                    };
+                    await this.mailTransport.sendMail(mailOptions);
+                    console.log('Mail sent.');
+                } catch (err) {
+                    // too late for error after response
+                    console.log('Mail not sent! ' + err)
+                }
+            }
+
+            if (!hasErrors) {
+                return;
             }
         }
         
