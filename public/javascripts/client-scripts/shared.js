@@ -24,11 +24,9 @@ const initialize = () => {
 }
 
 if (document.readyState == 'interactive' || document.readyState == 'complete') {
-    console.log(document.readyState);
     initialize();
 } else {
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('event');
         initialize();
     })
 }
