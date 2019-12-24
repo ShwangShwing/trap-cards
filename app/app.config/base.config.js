@@ -8,6 +8,7 @@ const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const { flash } = require('express-flash-message');
 const bodyParser = require('body-parser');
+var exphbs  = require('express-handlebars');
 
 const configApp = (app, config) => {
     app.use(morgan('dev'));
@@ -27,6 +28,28 @@ const configApp = (app, config) => {
         .join(__dirname, '../../public')));
     app.use(flash());
     app.set('views', path.join(__dirname, '../views'));
+    var hbs = exphbs.create({
+        extname: '.hbs',
+        defaultLayout: 'layout',
+        layoutsDir: 'app/views',
+        helpers: {
+            ifEq: function(a, b, opts) {
+                if (a == b) {
+                    return opts.fn(this);
+                } else {
+                    return opts.inverse(this);
+                }
+            },
+            ifNotEq: function(a, b, opts) {
+                if (a != b) {
+                    return opts.fn(this);
+                } else {
+                    return opts.inverse(this);
+                }
+            }
+        }
+    });
+    app.engine('hbs', hbs.engine);
     app.set('view engine', 'hbs');
 };
 

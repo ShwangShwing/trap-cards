@@ -6,12 +6,11 @@
     <script async src="/public/javascripts/client-scripts/shared.js"></script>
   </head>
   <body>
-    <div id="background"></div>
-    <div class="content">
+    <main>
         <div class="image-centered">
             <img src="/public/images/trap_logo.png" >
         </div>
-
+        <h1>{{title}}</h1>
         {{#if errors}}
         <div>
             {{#each errors}}
@@ -27,6 +26,17 @@
         </div>
         {{/if}}
         {{{body}}}
-    </div>
+    </main>
+    <nav>
+      {{#ifNotEq title 'Въвеждане на талон'}}
+      <a href="/redeem-stamp">Въвеждане на талон</a>
+      {{/ifNotEq}}
+      {{#ifNotEq title 'Регистрация'}}
+      <a href="/register">Регистрация</a>
+      {{/ifNotEq}}
+      {{#ifNotEq title 'Проверка на карта'}}
+      <a href="/card-check">Проверка на карта</a>
+      {{/ifNotEq}}
+    </nav>
   </body>
 </html>
