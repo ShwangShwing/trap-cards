@@ -1,19 +1,15 @@
-<h1>
-    {{title}}
-</h1>
 <div>
     <form action="" method="GET">
         <div class="item-row">
             <div class="item-label"><label for="card-number">Карта номер</label></div>
-            <div class="item-value"><input type="text" name="cardnumber" id="card-number" value="{{cardNumber}}"></div>
+            <div class="item-value"><input type="text" name="cardnumber" id="card-number" value="{{cardNumber}}" placeholder="Номер на карта"></div>
         </div>
         <div class="item-row">
             <div class="item-label"><label for="stamp-code">Талон код</label></div>
-            <div class="item-value"><input type="text" name="stampcode" id="stamp-code" value="{{stampCode}}"></div>
+            <div class="item-value"><input type="text" name="stampcode" id="stamp-code" value="{{stampCode}}" placeholder="Код на талон"></div>
         </div>
         <div class="item-row">
             <input type="submit" value="Въведи">
         </div>
     </form>
-    <a href="/register">Регистрация</a>
 </div>
