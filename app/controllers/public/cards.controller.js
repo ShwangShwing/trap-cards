@@ -19,7 +19,8 @@ class CardsController {
     async redeemStamp(req, res) {
         let cardNumber = req.query.cardnumber;
         let stampCode = req.query.stampcode;
-        if (cardNumber && stampCode) {
+
+        if (stampCode && cardNumber) {
             const delayAction = async (milliseconds) => {
                 return new Promise((resolve) => {
                     setTimeout(() => resolve(), milliseconds);
@@ -28,18 +29,20 @@ class CardsController {
             await delayAction(5000); // delay response for 5 seconds to avoid brute forcing the codes
 
             let hasError = false;
-
             const stamp = await this.data.stamps.getByCode(stampCode);
             if (stamp) {
                 if (stamp.claimedByNumber) {
                     hasError = true;
+                    req.flash('error', `Въведеният талон с код ${stamp.code} е вече използван!`);
                 }
             } else {
                 hasError = true;
+                req.flash('error', `Няма издаван талон с код ${stampCode}! Увери си, че си въвел кода на талона правилно!`);
             }
             let card = await this.data.cards.getByNumber(cardNumber);
             if (!card) {
                 hasError = true;
+                req.flash('error', `Няма карта с номер ${cardNumber}! Увери се, че си въвел номера на картата правилно!`);
             }
 
             if (card && stamp) {
@@ -49,9 +52,7 @@ class CardsController {
                 }
             }
 
-            if (hasError) {
-                req.flash('error', 'Кодът на талона е грешен, номерът на картата е грешен или талонът е вече използван!');
-            } else {
+            if (!hasError) {
                 req.flash('info', `Талон с код ${stamp.code} е въведен в карта номер ${card.number}.`);
                 stampCode = null;
 
