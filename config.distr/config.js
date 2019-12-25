@@ -22,7 +22,8 @@ const config = {
     trustedAdminIps: [
         '127.0.0.1',
         '::1'
-    ]
+    ],
+    isTest: false
 };
 
 module.exports = config;

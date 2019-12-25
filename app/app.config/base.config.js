@@ -28,6 +28,7 @@ const configApp = (app, config) => {
         .join(__dirname, '../../public')));
     app.use(flash());
     app.set('views', path.join(__dirname, '../views'));
+    app.locals.isTest = config.isTest;
     var hbs = exphbs.create({
         extname: '.hbs',
         defaultLayout: 'layout',

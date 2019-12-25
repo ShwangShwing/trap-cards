@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+    {{#if isTest}}
+    <meta name="robots" content="noindex" />
+    {{/if}}
     <title>{{title}}</title>
     <link rel="icon" href="/public/images/trap_logo.png">
     <link rel='stylesheet' href='/public/stylesheets/style.css' />
@@ -11,6 +14,9 @@
         <div class="image-centered">
             <img src="/public/images/trap_logo.png" >
         </div>
+        {{#if isTest}}
+        <h3>Този сайт е тестов!!!</h3>
+        {{/if}}
         <h1>{{title}}</h1>
         {{#if errors}}
         <div>
