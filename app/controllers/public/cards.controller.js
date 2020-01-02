@@ -7,13 +7,16 @@ class CardsController {
 
     async cardCheck(req, res) {
         let card = undefined;
+        let cardHistory = undefined;
         if (req.query.cardnumber) {
             card = await this.data.cards.getByNumber(req.query.cardnumber);
-            if (!card) {
-                req.flash('error', `Карта с номер ${req.query.cardnumber} не съществува.`);
-            }
+            if (card) {
+                cardHistory = await this.data.cards.getCardHistoryByNumber(card.number);
+            } else {
+				req.flash('error', `Карта с номер ${req.query.cardnumber} не съществува.`);
+			}
         }
-        res.render('public/card-check', { title: 'Проверка на карта', searchedCardNumber: req.query.cardnumber, card: card, errors:  await req.consumeFlash('error') });
+        res.render('public/card-check', { title: 'Проверка на карта', searchedCardNumber: req.query.cardnumber, card: card, cardHistory: cardHistory, errors:  await req.consumeFlash('error') });
     }
 
     async redeemStamp(req, res) {

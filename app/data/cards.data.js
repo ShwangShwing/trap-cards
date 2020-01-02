@@ -28,6 +28,30 @@ class CardsData extends BaseData {
         return new Card(cards[0]);
     }
 
+	async getCardHistoryByNumber(number) {
+        const whereClause = 's.claimed_by_number = ?';
+        const query = {
+            sql: `select
+			s.code as code,
+			s.points as points,
+			DATE_FORMAT(s.claimed_ts, '%d.%m.%Y %H:%m:%s') as timestamp,
+			a.activity_type as activity
+			from stamps as s
+			left join activity_types as a
+			ON s.activity_type_id = a.id
+			where ${whereClause}
+			ORDER BY timestamp DESC`,
+            values: [ number ]
+        };
+
+        const cardHistory = await this._database.query(query);
+        if (!Array.isArray(cardHistory) || !cardHistory.length) {
+            return null;
+        }
+
+        return cardHistory;
+	}
+
     async addCard(card, putChecksumToCardNumber) {
         const getCardNumSeed = async () => {
             this._database.beginTransaction();

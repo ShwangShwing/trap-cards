@@ -42,7 +42,7 @@ a {
   display: block;
 }
 .card-active {
-  color: green;
+  color: yellow;
 }
 .card-inactive {
   color: red;
@@ -137,3 +137,18 @@ h1 {
 	display: block;
 	margin: 0 auto;
 }
+.card_name{
+	font-size: 3em;
+	line-height: 1em;
+}
+.card_points{
+	font-size: 2.3em;
+	line-height: 1em;
+}
+table.table_history{
+	font-size: 2em;
+	text-align: left;
+	line-height: 1em;
+}
+
+

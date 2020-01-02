@@ -1,23 +1,40 @@
 {{#if card}}
     <div>
         <div class="item-row">
-            <div class="item-label">Номер</div>
-            <div class="item-value">{{card.number}}</div>
+            <div class="card_name">{{card.firstName}} {{card.lastName}}</div>
         </div>
-        <div class="item-row">
-            <div class="item-label">Притежател</div>
-            <div class="item-value">{{card.firstName}} {{card.lastName}}</div>
-        </div>
-        <div class="item-row">
-            <div class="item-label">Активна</div>
-            <div class="item-value {{#if card.isActive}}card-active{{else}}card-inactive{{/if}}">{{#if card.isActive}}Да!{{else}}Не{{/if}}</div>
+        <div class="card_points">
+            <div>Баланс: {{card.balance}} т. -
+				<span class="{{#if card.isActive}}card-active{{else}}card-inactive{{/if}}">
+					{{#if card.isActive}}Активна!{{else}}Неактивна :({{/if}}
+				</span>
+			</div>
         </div>
     </div>
+	</br></br></br>
+	<table class="table_history">
+		<tr>
+			<th>Дата</th>
+			<th>Точки</th>
+			<th>Дейност</th>
+			<th>Код</th>
+		</tr>
+		{{#each cardHistory as |cardHistoryItem|}}
+		<tr>
+			<td>{{cardHistoryItem.timestamp}}</td>
+			<td class="card_points">{{cardHistoryItem.points}}</td>
+			<td>{{cardHistoryItem.activity}}</td>
+			<td>{{cardHistoryItem.code}}</td>
+		</tr>
+		{{/each}}
+	</table>
 {{/if}}
+
+
 <div>
     <form action="" method="GET">
         <label for=""><label for="card-number">Номер:</label>
-        <input type="text" name="cardnumber" id="card-number" placeholder="(номер на карта)" value="{{searchedCardNumber}}">
+        <input type="text" name="cardnumber" id="card-number" placeholder="Номер на карта" value="{{searchedCardNumber}}">
         <input type="submit" name="" value="Покажи">
     </form>
 </div>
