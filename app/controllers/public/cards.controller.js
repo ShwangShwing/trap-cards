@@ -137,7 +137,7 @@ class CardsController {
                 try {
                     newCard = await this.data.cards.addCard(cardFields, (cn) => this.cardNumbers.putChecksum(cn));
                     req.flash('info', `Успешна регистрация. Номерът на регистрираната карта е ${newCard.number}.`);
-                    res.redirect(303, `/redeem-stamp?cardnumber=${newCard.number}`);
+                    res.redirect(303, `/add?cardnumber=${newCard.number}`);
                 } catch (err) {
                     req.flash('error', 'Възникна грешка при регистрацията!');
                     hasErrors = true;
