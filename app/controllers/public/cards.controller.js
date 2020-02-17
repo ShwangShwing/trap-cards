@@ -91,7 +91,7 @@ class CardsController {
             stampCode,
             messages: await req.consumeFlash('info'), 
             errors: await req.consumeFlash('error') 
-        });    
+        });
     }
 
     async register(req, res) {
@@ -183,6 +183,14 @@ class CardsController {
             errors: await req.consumeFlash('error') 
         }
         res.render('public/register', templateValues);    
+    }
+
+    async home(req, res) {
+        res.render('public/home', {
+            title: 'ТРАП - членски карти',
+            messages: await req.consumeFlash('info'),
+            errors: await req.consumeFlash('error')
+        });
     }
 }
 
