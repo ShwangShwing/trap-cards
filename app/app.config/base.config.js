@@ -27,6 +27,27 @@ const configApp = (app, config) => {
     app.use('/public', express.static(path
         .join(__dirname, '../../public')));
     app.use(flash());
+    const autoTrimmer = (req, res, next) => {
+        if (!req) {
+            next();
+            return;
+        }
+
+        if (req.body) {
+            for (const [key, value] of Object.entries(req.body)) {
+                req.body[key] = value.trim();
+            }
+        }
+
+        if (req.query) {
+            for (const [key, value] of Object.entries(req.query)) {
+                req.query[key] = value.trim();
+            }
+        }
+
+        next();
+    }
+    app.use(autoTrimmer);
     app.set('views', path.join(__dirname, '../views'));
     app.locals.isTest = config.isTest;
     var hbs = exphbs.create({
