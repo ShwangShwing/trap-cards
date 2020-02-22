@@ -8,9 +8,9 @@ const attach = (app, controllersFactory) => {
   
 
   router.route('/admin/login')
-      .get((req, res) => {
-          authController.login(req, res);
-      })
+      .get(
+        (req, res, next) => authController.verifyTrustedIp(req, res, next), 
+        (req, res) => authController.login(req, res))
       .post(passport.authenticate('local', {
           successRedirect: '/admin/stamps',
           failureRedirect: '/admin/login',
@@ -23,7 +23,10 @@ const attach = (app, controllersFactory) => {
           res.redirect('/admin/login');
       });
 
-  router.route('/admin/stamps').get((req, res, next) => authController.verifyLoggedAdmin(req, res, next), (req, res) => adminController.stamps(req, res));
+  router.route('/admin/stamps').get(
+      (req, res, next) => authController.verifyTrustedIp(req, res, next), 
+      (req, res, next) => authController.verifyLoggedAdmin(req, res, next), 
+      (req, res) => adminController.stamps(req, res));
 
   app.use('/', router);
 }

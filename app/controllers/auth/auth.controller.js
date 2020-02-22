@@ -4,19 +4,35 @@ class AuthController {
         this._trustedAdminIps = trustedAdminIps;
     }
 
-    login(req, res) {
-        res.render('admin/login', { loggedUser: req.user, page: 'login' });
+    async login(req, res) {
+        const templateValues = {
+            title: 'Вход за администратори',
+            messages: await req.consumeFlash('info'),
+            errors: await req.consumeFlash('error')
+        }
+
+        res.render('admin/login', templateValues);
     }
 
-    verifyLoggedAdmin(req, res, next) {
-        // verify ip address
-        const requestIP = req.connection.remoteAddress;
-        if(this._trustedAdminIps.indexOf(requestIP) < 0 || !req.user) {
-            const msg = 'Тази странца е само за администратори.';
-            const error = { message: msg, code: 401 };
-            return next(new Error(JSON.stringify(error)));
+    async verifyLoggedAdmin(req, res, next) {
+        if (req.user) {
+            return next();
+        } else {
+            req.flash('error', 'Няма логнат администратор.');
+            return res.redirect(303, '/admin/login');
         }
-        return next();
+    }
+
+    async verifyTrustedIp(req, res, next) {
+        const requestIP = req.connection.remoteAddress;
+        const isIpTrusted = this._trustedAdminIps.indexOf(requestIP) >= 0;
+        if (isIpTrusted) {
+            return next();
+        } else {
+            req.flash('error', 'Тази странца е само за администратори.');
+
+            return res.redirect(303, '/home');
+        }
     }
 }
 

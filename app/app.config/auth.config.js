@@ -25,7 +25,7 @@ const configAuth = (app, data) => {
                 })
                 .catch(() => {
                     done(null, false,
-                        { message: 'Invalid login credentials!' });
+                        { message: 'Невалиден потребител или парола!' });
                 });
         }
     ));
